@@ -1,0 +1,54 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE QML [
+<!ELEMENT Integer EMPTY>
+<!ATTLIST Integer value CDATA #REQUIRED>
+<!ELEMENT Double EMPTY>
+<!ATTLIST Double value CDATA #REQUIRED>
+<!ELEMENT String EMPTY>
+<!ATTLIST String value CDATA #REQUIRED>
+<!ELEMENT Ident EMPTY>
+<!ATTLIST Ident value CDATA #REQUIRED>
+<!ELEMENT Scalar EMPTY>
+<!ATTLIST Scalar value CDATA #REQUIRED>
+
+<!ELEMENT Progr ((ToplF | ToplFT)*)>
+
+<!ELEMENT ToplF ((Ident), (ArgVar | ArgWild | ArgTyped | ArgTup)*, (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet))>
+<!ELEMENT ToplFT ((Ident), (ArgVar | ArgWild | ArgTyped | ArgTup)*, (TQubit | TTens), (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet))>
+
+<!ELEMENT ArgVar ((Ident))>
+<!ELEMENT ArgWild (EMPTY)>
+<!ELEMENT ArgTyped ((Ident), (TQubit | TTens))>
+<!ELEMENT ArgTup ((Ident), (Ident))>
+
+<!ELEMENT EVar ((Ident))>
+<!ELEMENT EQubit ((QOne | QZero | QPlus | QMinus | QImagi | QImagj))>
+<!ELEMENT ETup ((EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet)+)>
+<!ELEMENT EMul ((CReal | CImag | CComp), (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet))>
+<!ELEMENT EApp ((EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet), (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet))>
+<!ELEMENT EPlus ((EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet), (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet))>
+<!ELEMENT EIfq ((EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet), (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet), (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet))>
+<!ELEMENT EIf ((EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet), (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet), (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet))>
+<!ELEMENT ELet ((LLet)*, (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet))>
+
+<!ELEMENT LLet ((PVar | PTup), (EVar | EQubit | ETup | EMul | EApp | EPlus | EIfq | EIf | ELet))>
+
+<!ELEMENT CReal ((Scalar))>
+<!ELEMENT CImag ((Scalar))>
+<!ELEMENT CComp ((Scalar), (Scalar))>
+
+<!ELEMENT PVar ((Ident))>
+<!ELEMENT PTup ((Ident), (Ident))>
+
+<!ELEMENT QOne (EMPTY)>
+<!ELEMENT QZero (EMPTY)>
+<!ELEMENT QPlus (EMPTY)>
+<!ELEMENT QMinus (EMPTY)>
+<!ELEMENT QImagi (EMPTY)>
+<!ELEMENT QImagj (EMPTY)>
+
+<!ELEMENT TQubit (EMPTY)>
+<!ELEMENT TTens ((TQubit | TTens), (TQubit | TTens))>
+
+
+]>

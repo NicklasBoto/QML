@@ -1,0 +1,65 @@
+Progr. Program ::= [Toplevel] ;
+terminator Toplevel "end" ;
+
+ToplF  . Toplevel ::= "def" Ident [Arg] ":=" Expr ;
+ToplFT . Toplevel ::= "def" Ident [Arg] "->" Type ":=" Expr ;
+separator Arg "" ;
+
+ArgTup . Arg ::= "(" [TypedVar] ")" ;
+
+TVar . TypedVar ::= Ident ":" Type ;
+separator nonempty TypedVar "," ;
+
+EVar   . Expr3 ::= Ident ;
+ETrue  . Expr3 ::= "~1" ;
+EFalse . Expr3 ::= "~0" ;
+qplus  . Expr3 ::= "~+" ;
+qminus . Expr3 ::= "~-" ;
+qimagi . Expr3 ::= "~i" ;
+qimagj . Expr3 ::= "~j" ;
+ETup   . Expr3 ::= "(" [Expr] ")" ;
+EMul   . Expr3 ::= "[" Complex "]" Expr3 ;
+EApp   . Expr2 ::= Expr2 Expr3 ;
+EPlus  . Expr1 ::= Expr2 "+" Expr1 ;
+EIfq   . Expr1 ::= "if°" Expr "then" Expr "else" Expr ;
+eifq   . Expr1 ::= "if*" Expr "then" Expr "else" Expr ;
+EIf    . Expr1 ::= "if" Expr "then" Expr "else" Expr ;
+ELet   . Expr1 ::= "let" "{" [Let] "}" "in" Expr ;
+coercions Expr 3 ;
+separator Expr "," ;
+
+define qplus  = EPlus ETrue EFalse ;
+define qminus = EPlus (EMul (CComp (Scalar "-1") (Scalar "0")) ETrue) EFalse ; 
+define qimagi = EMul (CComp (Scalar "0") (Scalar "1")) ETrue ; 
+define qimagj = EMul (CComp (Scalar "0") (Scalar "-1")) EFalse ; 
+define eifq c t f = EIfq c t f ;
+
+layout "let" ;
+layout stop "in" ;
+
+LLet . Let ::= Pattern "=" Expr ;
+separator nonempty Let ";" ;
+
+CComp . Complex ::= Scalar "+" Scalar "j" ;
+creal . Complex ::= Scalar ;
+cimag . Complex ::= Scalar "j" ;
+cnmag . Complex ::= "-j" ;
+cjmag . Complex ::= "j" ;
+
+define creal r = CComp r (Scalar "0") ;
+define cimag i = CComp (Scalar "0") i ;
+define cnmag   = CComp (Scalar "0") (Scalar "-1") ;
+define cjmag   = CComp (Scalar "0") (Scalar "1") ;
+
+token Scalar '-'? digit+ ('.' digit+ ('e' '-'? digit+)?)? ;
+
+PVar . Pattern ::= Ident ;
+PTup . Pattern ::= "(" Ident "," Ident ")" ;
+
+TQubit . Type2 ::= "qubit" ;
+TUnit  . Type2 ::= "unit" ;
+TTens  . Type1 ::= Type2 "*" Type1 ;
+coercions Type 2 ;
+
+comment "--" ;
+comment "{-" "-}" ;
