@@ -69,12 +69,9 @@ infer (Mul _λ q) = q `has` TypeQubit
 infer _ = error "not implemented"
 
 equals :: Expr -> Expr -> Check Type
-equals a b = do
-    a_type <- infer a
-    b_type <- infer b
-    if a_type == b_type
-        then return a_type
-        else throwError $ TypeMismatch a_type b_type
+equals a b = (,) <$> infer a <*> infer b >>= \case
+    (m,k) | m == k -> return m
+          | otherwise -> throwError $ TypeMismatch m k
 
 has :: Expr -> Type -> Check Type
 has e t = infer e >>= \case
