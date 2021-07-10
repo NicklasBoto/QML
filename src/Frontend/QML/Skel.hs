@@ -55,4 +55,5 @@ transType x = case x of
   TQubit -> failure x
   TUnit -> failure x
   TTens type_1 type_2 -> failure x
+  TArrow type_1 type_2 -> failure x
 

@@ -1,9 +1,16 @@
 Progr. Program ::= [Toplevel] ;
-terminator Toplevel "end" ;
+terminator Toplevel "" ;
 
-ToplF  . Toplevel ::= "def" Ident [Arg] ":=" Expr ;
-ToplFT . Toplevel ::= "def" Ident [Arg] "->" Type ":=" Expr ;
+ToplF  . Toplevel ::= "def" Ident [Arg] ":=" Expr "end" ;
+ToplFT . Toplevel ::= "def" Ident [Arg] "->" Type ":=" Expr "end" ;
+toplcl . Toplevel ::= "def" Ident [Arg] ":" Type ":=" Expr "end" ;
+toplcn . Toplevel ::= "var" Ident ":=" Expr ;
+toplct . Toplevel ::= "var" Ident ":" Type ":=" Expr ; 
 separator Arg "" ;
+
+define toplcl n a t e = ToplFT n a  t e ;
+define toplcn n e     = ToplF  n []   e ;
+define toplct n t e   = ToplFT n [] t e ;
 
 ArgTup . Arg ::= "(" [TypedVar] ")" ;
 
@@ -59,6 +66,7 @@ PTup . Pattern ::= "(" Ident "," Ident ")" ;
 TQubit . Type2 ::= "qubit" ;
 TUnit  . Type2 ::= "unit" ;
 TTens  . Type1 ::= Type2 "*" Type1 ;
+TArrow . Type1 ::= Type2 "->" Type1 ;
 coercions Type 2 ;
 
 comment "--" ;

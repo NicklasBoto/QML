@@ -39,5 +39,5 @@ data Let = LLet Pattern Expr
 data Pattern = PVar String | PTup String String
   deriving (Eq, Ord, Show, Read)
 
-data Type = TypeQubit | TypeUnit | Type :* Type
+data Type = TypeQubit | TypeUnit | Type :* Type | Type :-> Type
   deriving (Eq, Ord, Show, Read)

@@ -7,6 +7,7 @@ data TypeError
     | NotOrthogonal Expr Expr
     | InnerProductNotDefined Expr Expr
     | VariableNotInScope String
+    | NotFunctionType Type
     | UnexpectedError
     deriving Show
 

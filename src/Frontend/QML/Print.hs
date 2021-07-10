@@ -103,10 +103,10 @@ instance Print [Frontend.QML.Abs.Toplevel] where
 
 instance Print Frontend.QML.Abs.Toplevel where
   prt i e = case e of
-    Frontend.QML.Abs.ToplF id args expr -> prPrec i 0 (concatD [doc (showString "def"), prt 0 id, prt 0 args, doc (showString ":="), prt 0 expr])
-    Frontend.QML.Abs.ToplFT id args type_ expr -> prPrec i 0 (concatD [doc (showString "def"), prt 0 id, prt 0 args, doc (showString "->"), prt 0 type_, doc (showString ":="), prt 0 expr])
+    Frontend.QML.Abs.ToplF id args expr -> prPrec i 0 (concatD [doc (showString "def"), prt 0 id, prt 0 args, doc (showString ":="), prt 0 expr, doc (showString "end")])
+    Frontend.QML.Abs.ToplFT id args type_ expr -> prPrec i 0 (concatD [doc (showString "def"), prt 0 id, prt 0 args, doc (showString "->"), prt 0 type_, doc (showString ":="), prt 0 expr, doc (showString "end")])
   prtList _ [] = concatD []
-  prtList _ (x:xs) = concatD [prt 0 x, doc (showString "end"), prt 0 xs]
+  prtList _ (x:xs) = concatD [prt 0 x, prt 0 xs]
 
 instance Print [Frontend.QML.Abs.Arg] where
   prt = prtList
@@ -168,4 +168,5 @@ instance Print Frontend.QML.Abs.Type where
     Frontend.QML.Abs.TQubit -> prPrec i 2 (concatD [doc (showString "qubit")])
     Frontend.QML.Abs.TUnit -> prPrec i 2 (concatD [doc (showString "unit")])
     Frontend.QML.Abs.TTens type_1 type_2 -> prPrec i 1 (concatD [prt 2 type_1, doc (showString "*"), prt 1 type_2])
+    Frontend.QML.Abs.TArrow type_1 type_2 -> prPrec i 1 (concatD [prt 2 type_1, doc (showString "->"), prt 1 type_2])
 

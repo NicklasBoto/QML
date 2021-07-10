@@ -56,14 +56,15 @@ import Frontend.QML.ErrM
   'qubit' { PT _ (TS _ 23) }
   'then' { PT _ (TS _ 24) }
   'unit' { PT _ (TS _ 25) }
-  '{' { PT _ (TS _ 26) }
-  '}' { PT _ (TS _ 27) }
-  '~+' { PT _ (TS _ 28) }
-  '~-' { PT _ (TS _ 29) }
-  '~0' { PT _ (TS _ 30) }
-  '~1' { PT _ (TS _ 31) }
-  '~i' { PT _ (TS _ 32) }
-  '~j' { PT _ (TS _ 33) }
+  'var' { PT _ (TS _ 26) }
+  '{' { PT _ (TS _ 27) }
+  '}' { PT _ (TS _ 28) }
+  '~+' { PT _ (TS _ 29) }
+  '~-' { PT _ (TS _ 30) }
+  '~0' { PT _ (TS _ 31) }
+  '~1' { PT _ (TS _ 32) }
+  '~i' { PT _ (TS _ 33) }
+  '~j' { PT _ (TS _ 34) }
   L_ident  { PT _ (TV $$) }
   L_Scalar { PT _ (T_Scalar $$) }
 
@@ -79,10 +80,13 @@ Program :: { Program }
 Program : ListToplevel { Frontend.QML.Abs.Progr (reverse $1) }
 ListToplevel :: { [Toplevel] }
 ListToplevel : {- empty -} { [] }
-             | ListToplevel Toplevel 'end' { flip (:) $1 $2 }
+             | ListToplevel Toplevel { flip (:) $1 $2 }
 Toplevel :: { Toplevel }
-Toplevel : 'def' Ident ListArg ':=' Expr { Frontend.QML.Abs.ToplF $2 (reverse $3) $5 }
-         | 'def' Ident ListArg '->' Type ':=' Expr { Frontend.QML.Abs.ToplFT $2 (reverse $3) $5 $7 }
+Toplevel : 'def' Ident ListArg ':=' Expr 'end' { Frontend.QML.Abs.ToplF $2 (reverse $3) $5 }
+         | 'def' Ident ListArg '->' Type ':=' Expr 'end' { Frontend.QML.Abs.ToplFT $2 (reverse $3) $5 $7 }
+         | 'def' Ident ListArg ':' Type ':=' Expr 'end' { toplcl_ $2 (reverse $3) $5 $7 }
+         | 'var' Ident ':=' Expr { toplcn_ $2 $4 }
+         | 'var' Ident ':' Type ':=' Expr { toplct_ $2 $4 $6 }
 ListArg :: { [Arg] }
 ListArg : {- empty -} { [] } | ListArg Arg { flip (:) $1 $2 }
 Arg :: { Arg }
@@ -137,6 +141,7 @@ Type2 : 'qubit' { Frontend.QML.Abs.TQubit }
       | '(' Type ')' { $2 }
 Type1 :: { Type }
 Type1 : Type2 '*' Type1 { Frontend.QML.Abs.TTens $1 $3 }
+      | Type2 '->' Type1 { Frontend.QML.Abs.TArrow $1 $3 }
       | Type2 { $1 }
 Type :: { Type }
 Type : Type1 { $1 }
@@ -157,6 +162,9 @@ happyError ts =
     t:_     -> " before `" ++ id(prToken t) ++ "'"
 
 myLexer = tokens
+toplcl_ n_ a_ t_ e_ = ToplFT n_ a_ t_ e_
+toplcn_ n_ e_ = ToplF n_ [] e_
+toplct_ n_ t_ e_ = ToplFT n_ [] t_ e_
 qplus_ = EPlus ETrue EFalse
 qminus_ = EPlus (EMul (CComp (Scalar "-1") (Scalar "0")) ETrue) EFalse
 qimagi_ = EMul (CComp (Scalar "0") (Scalar "1")) ETrue

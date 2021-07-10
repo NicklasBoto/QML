@@ -51,3 +51,4 @@ convertType :: Abs.Type -> Type
 convertType Abs.TQubit = TypeQubit
 convertType Abs.TUnit  = TypeUnit
 convertType (Abs.TTens a b) = convertType a :* convertType b 
+convertType (Abs.TArrow a b) = convertType a :-> convertType b

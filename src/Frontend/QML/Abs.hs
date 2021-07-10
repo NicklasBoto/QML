@@ -44,6 +44,6 @@ data Complex = CComp Scalar Scalar
 data Pattern = PVar Ident | PTup Ident Ident
   deriving (Eq, Ord, Show, Read)
 
-data Type = TQubit | TUnit | TTens Type Type
+data Type = TQubit | TUnit | TTens Type Type | TArrow Type Type
   deriving (Eq, Ord, Show, Read)
 
