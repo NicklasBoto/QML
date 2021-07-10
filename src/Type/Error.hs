@@ -18,7 +18,7 @@ instance Monoid TypeError where
 
 instance Show TypeError where
     show (TypeMismatch expected actual) =
-        "Couldn't match expected type '" ++ show expected ++ "' with actual type '" ++ show actual
+        "Couldn't match expected type '" ++ show expected ++ "' with actual type '" ++ show actual ++ "'"
 
     show (NotOrthogonal t f) =
         "Quantum conditional branches must be orthogonal, ⟨" ++ show t ++ "|" ++ show f ++ "⟩ ≠ 0"
@@ -28,6 +28,9 @@ instance Show TypeError where
 
     show (VariableNotInScope v) =
         "Variable '" ++ v ++ "' not in scope"
+
+    show (NotFunctionType t) =
+        "Not a function type '" ++ show t ++ "'"
 
     show UnexpectedError =
         "Something unexpected happened!"
