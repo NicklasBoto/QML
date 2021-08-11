@@ -15,8 +15,8 @@ end
 Quantum and Turing-completeness proof:
 
 ```rb
-def (~0) := 1 == 0
-def (~1) := 1 == 1
+def (~0) := 1 = 0
+def (~1) := 1 = 1
 def H  q := if° q then ~0 - ~1 else ~0 + ~1
 def X  q := if° q then ~0 else ~1
 def S  q := if° q then [j] ~1 else ~0
